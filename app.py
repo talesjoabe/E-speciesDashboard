@@ -95,13 +95,18 @@ def generate_bar_chart(df, column, filter_columns, title, xaxis=dict(), yaxis=di
     return fig
 
 
-# cloud_mask = np.array(Image.open(requests.get('https://lh3.googleusercontent.com/proxy/xxQLBFLx2RC-OQ7gn-D7UUACbTUnJQlJCMRyeU4nDGYZXafHeXMPpZx5IF021TT51ajfwUoQf8ZM5f_3cVIVayOL8qHXNWUVl1QmfFK1tdM1BSQpXKDgwVogeTT0ZWY2o8BQzvs4xstzhQ4ggw', stream=True).raw))
+#cloud_mask = np.array(Image.open(requests.get('https://lh3.googleusercontent.com/proxy/xxQLBFLx2RC-OQ7gn-D7UUACbTUnJQlJCMRyeU4nDGYZXafHeXMPpZx5IF021TT51ajfwUoQf8ZM5f_3cVIVayOL8qHXNWUVl1QmfFK1tdM1BSQpXKDgwVogeTT0ZWY2o8BQzvs4xstzhQ4ggw', stream=True).raw))
 
 def plot_wordcloud(data, shape):
     d = {a: x for a, x in data.values}
     wc = WordCloud(width=500, height=500, scale=1.0,background_color='white')
     wc.fit_words(d)
     return wc.to_image()
+
+def plot_wordcloud2(data, shape):
+  wc = WordCloud(background_color='white', width=750, height=400, scale=1.0)
+  wc.fit_words(data)
+  return wc.to_image()
 
 
 def add(a, b, c, d, e):
@@ -453,38 +458,14 @@ main_graphs = html.Div([
 
         , style={'backgroundColor' : '#F1F1F1'}),
 
-    # html.Div(children=[
-    #     html.Center(html.Div(children=['Espécies da Fauna com mais diversidade de ameaças'], style={
-    #                 'font-size': '20px', 'color': '#2a3f5f'}), className='six columns'),
-    #     html.Center(html.Div(children=['Espécies da Flora com mais diversidade de ameaças'], style={
-    #         'font-size': '20px', 'color': '#2a3f5f'}), className='six columns'),
-    # ], className='row'),
+        dbc.Row(
+          html.Center(children=[
+            html.Center([html.Br(),
+                        html.H5("Diversidade de ameaças", style={'text-align': 'center', 'color' : '#1FA299'})]),
+            html.Img(id="image_wc_ameacas", width="80%", height="80%"),
+          ], className = 'column', style = {'width':'100%','border': '2px solid #F1F1F1', 'border-radius': '6px', 'justify-content': 'center'})
+        )
 
-    # html.Div(children=[
-    #     html.Center(html.Div(children=[
-    #         html.Img(id="image_wc_fauna"),
-    #     ], className='six columns')),
-    #     html.Center(html.Div(children=[
-    #         html.Img(id="image_wc_flora"),
-    #     ], className='six columns')),
-    # ], className='row'),
-    # html.Br(),
-    # html.H5("Existência de um Plano Nacional para Conservação dentre as espécies não exclusivas no Brasil por Biomas",
-    #         style={'text-align': 'center'}),
-    # html.Div([
-    #     dcc.Dropdown(
-    #         id='xaxis-column',
-    #         options=[{'label': i, 'value': i}
-    #                  for i in dados_biomas['Bioma'].value_counts().index],
-    #         value='Cerrado',
-    #         clearable=False,
-    #
-    #     ),
-    # ]),
-    #
-    # html.Div([
-    #     dcc.Graph(id='the_graph')
-    # ])
 ])
 
 
@@ -503,50 +484,12 @@ def make_image(b):
                    'Espécie (Simplificado)', 'total_ameacas']], shape='flora').save(img, format='PNG')
     return 'data:image/png;base64,{}'.format(base64.b64encode(img.getvalue()).decode())
 
-# @ app.callback(
-#     Output(component_id='the_graph', component_property='figure'),
-#     [Input(component_id='xaxis-column', component_property='value')]
-# )
-# def update_graph(xasis_column_name):
-#     fig_teste = go.Figure(data=[go.Pie(labels=dados_biomas.loc[dados_biomas['Bioma'] == xasis_column_name, 'Plano de Ação Nacional para Conservação (PAN)'].value_counts().sort_index().index,
-#                                        values=dados_biomas.loc[dados_biomas['Bioma'] == xasis_column_name, 'Plano de Ação Nacional para Conservação (PAN)'].value_counts().sort_index(), hole=.4)])
-#     fig_teste.update_layout(colorway=[
-#                             '#636EFA', '#EF553B'], legend_traceorder='reversed', template="plotly")
-#     return (fig_teste)
-#     id="satellite-dropdown-component",
-#     options=[
-#         {"label": "H45-K1", "value": "h45-k1"},
-#         {"label": "L12-5", "value": "l12-5"},
-#     ],
-#     clearable=False,
-#     value="h45-k1",
-# )
+@app.callback(Output('image_wc_ameacas', 'src'), [Input('image_wc_flora', 'id')])
+def make_image(b):
+    img = BytesIO()
+    plot_wordcloud2(data=dados_ameacas['Principais_ameacas'].value_counts(), shape='flora').save(img, format='PNG')
+    return 'data:image/png;base64,{}'.format(base64.b64encode(img.getvalue()).decode())
 
-
-# satellite_dropdown_text = html.P(
-#     id="satellite-dropdown-text", children=["DCA01131", html.Br(), "CIÊNCIA DE DADOS"]
-# )
-#
-# satellite_title = html.H1(
-#     id="satellite-name", children=[
-#         "Análise das espécies ameaçadas no Brasil"])
-#
-# satellite_body = html.P(
-#     className="satellite-description", id="satellite-description", children=["1. Isaac Gomes", html.Br(), "2. Mateus Abrantes", html.Br(), "3. Tales Joabe"]
-# )
-#
-# side_panel_layout = html.Div(
-#     id="panel-side",
-#     children=[
-#         satellite_dropdown_text,
-#         # html.Div(id="satellite-dropdown", children=satellite_dropdown),
-#         html.Div(id="panel-side-text",
-#                  children=[
-#                      satellite_title,
-#                     satellite_body,
-#                  ]),
-#     ],
-# )
 
 
 main_panel_layout = html.Div(
