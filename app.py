@@ -27,6 +27,7 @@ geojson_biomas = json.load(open('./assets/biomas_brasil.json'))
 dados_estados.reset_index(inplace=True)
 dadosbiomas.reset_index(inplace=True)
 
+
 # ----------------------------------------------
 dados = pd.read_csv('./date/dados_tratados.csv')
 dados.head()
@@ -90,7 +91,7 @@ def generate_bar_chart(df, column, filter_columns, title, xaxis=dict(), yaxis=di
             )
 
     fig.update_layout(barmode=barmode, xaxis=xaxis, yaxis=yaxis, legend={
-                      **legend, 'bgcolor': 'rgba(255, 255, 255, 0)', 'bordercolor': 'rgba(255, 255, 255, 0)'}, template="plotly_dark")
+                      **legend, 'bgcolor': 'rgba(255, 255, 255, 0)', 'bordercolor': '#CCCCCC'}, template="plotly")
     return fig
 
 
@@ -98,7 +99,7 @@ def generate_bar_chart(df, column, filter_columns, title, xaxis=dict(), yaxis=di
 
 def plot_wordcloud(data, shape):
     d = {a: x for a, x in data.values}
-    wc = WordCloud(width=500, height=500, scale=1.0)
+    wc = WordCloud(width=500, height=500, scale=1.0,background_color='white')
     wc.fit_words(d)
     return wc.to_image()
 
@@ -163,7 +164,7 @@ ameacas_fauna = dados_ameacas_qtd[dados_ameacas_qtd['Fauna/Flora'] == 'Fauna']
 ameacas_flora = dados_ameacas_qtd[dados_ameacas_qtd['Fauna/Flora'] == 'Flora']
 fig1 = go.Figure(data=[go.Pie(labels=dados['Espécie exclusiva do Brasil'].unique(
 ), values=dados['Espécie exclusiva do Brasil'].value_counts(), hole=.3,)])
-fig1.update_layout(template="plotly_dark")
+fig1.update_layout(template="plotly")
 
 fig2 = generate_bar_chart(
     dados,
@@ -189,13 +190,13 @@ fig3 = generate_bar_chart(
 fig4 = go.Figure(data=[go.Pie(labels=dados_biomas.loc[dados_biomas['Espécie exclusiva do Brasil'] == 'Sim', 'Plano de Ação Nacional para Conservação (PAN)'].value_counts().sort_index().index,
                               values=dados_biomas.loc[dados_biomas['Espécie exclusiva do Brasil'] == 'Sim', 'Plano de Ação Nacional para Conservação (PAN)'].value_counts().sort_index(), hole=.4)])
 fig4.update_layout(colorway=[
-                   '#EF553B', '#636EFA'], template="plotly_dark")
+                   '#EF553B', '#636EFA'], template="plotly")
 
 
 fig5 = go.Figure(data=[go.Pie(labels=dados_biomas.loc[dados_biomas['Espécie exclusiva do Brasil'] == 'Não', 'Plano de Ação Nacional para Conservação (PAN)'].value_counts().sort_index().index,
                               values=dados_biomas.loc[dados_biomas['Espécie exclusiva do Brasil'] == 'Não', 'Plano de Ação Nacional para Conservação (PAN)'].value_counts().sort_index(), hole=.4)])
 fig5.update_layout(colorway=[
-                   '#636EFA', '#EF553B'], legend_traceorder='reversed', template="plotly_dark")
+                   '#636EFA', '#EF553B'], legend_traceorder='reversed', template="plotly")
 
 fig6 = generate_bar_chart(
     dados,
@@ -222,7 +223,7 @@ fig7 = generate_bar_chart(
 map_graph = html.Div([
     html.Br(),
     html.H5("Espécies ameaçadas por Estados",
-            style={'text-align': 'center'}),
+            style={'text-align': 'center', 'color' : '#1FA299'}),
 
     dcc.Dropdown(id="estados_select",
                  options=[
@@ -274,7 +275,7 @@ def update_graph(option_slctd):
         scope="south america",
         color=option_slctd,
         hover_data=['Estado_de_Ocorrencia'],
-        template='plotly_dark',
+        template='plotly',
     )
     return fig
 
@@ -282,7 +283,7 @@ def update_graph(option_slctd):
 map_biomas = html.Div([
     html.Br(),
     html.H5("Espécies ameaçadas por Biomas",
-            style={'text-align': 'center'}),
+            style={'text-align': 'center', 'color' : '#1FA299'}),
     dcc.Dropdown(id="biomas_select",
                  options=[
                      {"label": "Quantidade total de espécies ameaçadas",
@@ -342,10 +343,10 @@ def update_graph(option_slctd):
         scope="south america",
         color=option_slctd,
         hover_data=['Bioma'],
-        template='plotly_dark',
+        template='plotly',
     )
 
-    fig_bar_dados_biomas = px.bar(dff, y=option_slctd, x='Bioma', template='plotly_dark',
+    fig_bar_dados_biomas = px.bar(dff, y=option_slctd, x='Bioma', template='plotly',
                                   text=option_slctd, color=option_slctd, color_continuous_scale='Reds')
     fig_bar_dados_biomas.update_traces(
         texttemplate='%{text:.2s %}', textposition='outside')
@@ -360,7 +361,7 @@ def update_graph(option_slctd):
 # --------------------------------------
 main_graphs = html.Div([
     html.H5("Espécies exclusivas do Brasil",
-            style={'text-align': 'center'}),
+            style={'text-align': 'center', 'color' : '#1FA299'}),
     html.Div(children=dcc.Graph(
         id='item-1',
         figure=fig1
@@ -371,7 +372,7 @@ main_graphs = html.Div([
             dbc.Col([
                     html.Br(),
                     html.H5("Existência de um Plano Nacional para Conservação (PAN) dentre as espécies exclusivas no Brasil",
-                            style={'text-align': 'center'}),
+                            style={'text-align': 'center', 'color' : '#1FA299'}),
                     dcc.Graph(
                         id='item-4',
                         figure=fig4
@@ -379,7 +380,7 @@ main_graphs = html.Div([
             dbc.Col([
                     html.Br(),
                     html.H5("Existência de um Plano Nacional para Conservação (PAN) dentre as espécies não exclusivas no Brasil",
-                            style={'text-align': 'center'}),
+                            style={'text-align': 'center', 'color' : '#1FA299'}),
                     dcc.Graph(
                         id='item-5',
                         figure=fig5
@@ -392,7 +393,7 @@ main_graphs = html.Div([
             dbc.Col([
                     html.Br(),
                     html.H5("Perfil dos Grupos em relação a exclusividade no Brasil",
-                            style={'text-align': 'center'}),
+                            style={'text-align': 'center', 'color' : '#1FA299'}),
                     dcc.Graph(
                         id='item-2',
                         figure=fig2,
@@ -401,7 +402,7 @@ main_graphs = html.Div([
                     html.Br(),
 
                     html.H5("Perfil dos Biomas em relação a exclusividade no Brasil",
-                            style={'text-align': 'center'}),
+                            style={'text-align': 'center', 'color' : '#1FA299'}),
                     dcc.Graph(
                         id='item-3',
                         figure=fig3
@@ -414,7 +415,7 @@ main_graphs = html.Div([
             dbc.Col([
                     html.Br(),
                     html.H5("Perfil dos Grupos em relação a presença de um Plano de Ação Nacional Para Conservação",
-                            style={'text-align': 'center'}),
+                            style={'text-align': 'center', 'color' : '#1FA299'}),
                     dcc.Graph(
                         id='item-6',
                         figure=fig6
@@ -422,7 +423,7 @@ main_graphs = html.Div([
             dbc.Col([
                     html.Br(),
                     html.H5("Perfil dos Biomas em relação a presença de um Plano de Ação Nacional Para Conservação",
-                            style={'text-align': 'center'}),
+                            style={'text-align': 'center', 'color' : '#1FA299'}),
                     dcc.Graph(
                         id='item-7',
                         figure=fig7
@@ -435,21 +436,23 @@ main_graphs = html.Div([
             dbc.Col([
                     html.Br(),
                     html.H5("Espécies da Fauna com mais diversidade",
-                            style={'text-align': 'center'}),
+                            style={'text-align': 'center', 'color' : '#1FA299'}),
                     html.H5("de ameaças",
-                            style={'text-align': 'center'}),
+                            style={'text-align': 'center', 'color' : '#1FA299'}),
                     html.Img(id="image_wc_fauna", style={'width': '100%'})
                     ]),
             dbc.Col([
                     html.Br(),
                     html.H5("Espécies da Flora com mais diversidade",
-                            style={'text-align': 'center'}),
+                            style={'text-align': 'center', 'color' : '#1FA299'}),
                     html.H5("de ameaças",
-                            style={'text-align': 'center'}),
+                            style={'text-align': 'center', 'color' : '#1FA299'}),
                     html.Img(id="image_wc_flora", style={'width': '100%'})
                     ]),
         ]
-    ),
+
+        , style={'backgroundColor' : '#F1F1F1'}),
+
     # html.Div(children=[
     #     html.Center(html.Div(children=['Espécies da Fauna com mais diversidade de ameaças'], style={
     #                 'font-size': '20px', 'color': '#2a3f5f'}), className='six columns'),
@@ -500,7 +503,6 @@ def make_image(b):
                    'Espécie (Simplificado)', 'total_ameacas']], shape='flora').save(img, format='PNG')
     return 'data:image/png;base64,{}'.format(base64.b64encode(img.getvalue()).decode())
 
-
 # @ app.callback(
 #     Output(component_id='the_graph', component_property='figure'),
 #     [Input(component_id='xaxis-column', component_property='value')]
@@ -509,7 +511,7 @@ def make_image(b):
 #     fig_teste = go.Figure(data=[go.Pie(labels=dados_biomas.loc[dados_biomas['Bioma'] == xasis_column_name, 'Plano de Ação Nacional para Conservação (PAN)'].value_counts().sort_index().index,
 #                                        values=dados_biomas.loc[dados_biomas['Bioma'] == xasis_column_name, 'Plano de Ação Nacional para Conservação (PAN)'].value_counts().sort_index(), hole=.4)])
 #     fig_teste.update_layout(colorway=[
-#                             '#636EFA', '#EF553B'], legend_traceorder='reversed', template="plotly_dark")
+#                             '#636EFA', '#EF553B'], legend_traceorder='reversed', template="plotly")
 #     return (fig_teste)
 #     id="satellite-dropdown-component",
 #     options=[
@@ -521,30 +523,30 @@ def make_image(b):
 # )
 
 
-satellite_dropdown_text = html.P(
-    id="satellite-dropdown-text", children=["DCA01131", html.Br(), "CIÊNCIA DE DADOS"]
-)
-
-satellite_title = html.H1(
-    id="satellite-name", children=[
-        "Análise das espécies ameaçadas no Brasil"])
-
-satellite_body = html.P(
-    className="satellite-description", id="satellite-description", children=["1. Isaac Gomes", html.Br(), "2. Mateus Abrantes", html.Br(), "3. Tales Joabe"]
-)
-
-side_panel_layout = html.Div(
-    id="panel-side",
-    children=[
-        satellite_dropdown_text,
-        # html.Div(id="satellite-dropdown", children=satellite_dropdown),
-        html.Div(id="panel-side-text",
-                 children=[
-                     satellite_title,
-                    satellite_body,
-                 ]),
-    ],
-)
+# satellite_dropdown_text = html.P(
+#     id="satellite-dropdown-text", children=["DCA01131", html.Br(), "CIÊNCIA DE DADOS"]
+# )
+#
+# satellite_title = html.H1(
+#     id="satellite-name", children=[
+#         "Análise das espécies ameaçadas no Brasil"])
+#
+# satellite_body = html.P(
+#     className="satellite-description", id="satellite-description", children=["1. Isaac Gomes", html.Br(), "2. Mateus Abrantes", html.Br(), "3. Tales Joabe"]
+# )
+#
+# side_panel_layout = html.Div(
+#     id="panel-side",
+#     children=[
+#         satellite_dropdown_text,
+#         # html.Div(id="satellite-dropdown", children=satellite_dropdown),
+#         html.Div(id="panel-side-text",
+#                  children=[
+#                      satellite_title,
+#                     satellite_body,
+#                  ]),
+#     ],
+# )
 
 
 main_panel_layout = html.Div(
@@ -559,7 +561,7 @@ main_panel_layout = html.Div(
                                  'color': 'white', 'display': 'inline', 'vertical-align': 'middle', "padding-left": "5px", "font-weight": "600"}),
                          ]
                          )]),
-                 ], style={'backgroundColor': '#fec036', 'width': '100%', "padding": "10px", "text-align": "center"}),
+                 ], style={'backgroundColor': '#1FA299', 'width': '100%', "padding": "10px", "text-align": "center"}),
         html.Div(
             id="panel-upper-lower",
             children=[
@@ -575,7 +577,7 @@ app.layout = html.Div([
     html.Div(
         id="root",
         children=[
-            side_panel_layout,
+           # side_panel_layout,
             main_panel_layout,
         ],
     )

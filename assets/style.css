@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Playfair+Display|Roboto');
 
 body {
-    background-color: #1e1e1e;
+    background-color: #F4F6F6;
     color: #f3f6fa;
     margin: 0;
     padding: 0;
@@ -62,7 +62,7 @@ body {
     /* border: 1px solid gray; */
     /* border-radius: 4px; */
     color: white;
-    background-color: #2b2b2b;
+    background-color: #1FA299;
     cursor: pointer;
 }
 
@@ -75,7 +75,7 @@ body {
 }
 
 .Select-control, .Select-multi-value-wrapper, .Select-menu-outer div {
-    background-color: #2b2b2b;
+    background-color: #1FA299;
 }
 
 .Select-control, .Select, .Select-value-label, .Select-clear-zone {
@@ -88,7 +88,7 @@ body {
 }
 
 .Select-menu-outer div:hover {
-    background-color: rgba(255, 255, 255, 0.01);
+    background-color: #1FA299;
     cursor: pointer;
 }
 
@@ -113,12 +113,12 @@ body {
     font-size: 1.2rem;
     letter-spacing: 0.1rem;
     font-weight: normal;
-    color: #fec036;
+    color: white;
     text-align: center;
 }
 
 #satellite-dropdown-component {
-    color: #0f0f0f;
+    color: white;
     text-align: center;
     cursor: pointer;
 }
@@ -324,11 +324,11 @@ body {
 }
 
 #histogram-header .sc-bdVaJa.fsmTNM, .sc-bdVaJa.bQWqnK {
-    background-color: #2b2b2b !important;
+    background-color: white !important;
 }
 
 #histogram-header .sc-bxivhb.iArJfC, .sc-bxivhb.cmSQpo {
-    background-color: #484848 !important;
+    background-color: white !important;
 }
 
 #histogram-title {
@@ -400,7 +400,7 @@ body {
 #control-panel-elevation, #control-panel-temperature, #control-panel-latitude, #control-panel-longitude,
 #control-panel-speed, #control-panel-fuel, #control-panel-battery {
     cursor: pointer;
-    color: #f3f6fa !important;
+    color: white !important;
 }
 
 @media (max-width: 1800px) {
@@ -503,7 +503,7 @@ body {
 }
 
 .fZEiGQ, .giEVwx {
-    color: white !important;
+    color: #1FA299 !important;
 }
 
 .fuHQEk .track {
@@ -642,11 +642,11 @@ body {
 }
 
 #control-panel-speed-component .scale text {
-    fill: white !important;
+    fill: #1FA299 !important;
 }
 
 .fuHQEk .needle {
-    stroke: white !important;
+    stroke: #1FA299 !important;
 }
 
 .fuHQEk .needle-knob {
